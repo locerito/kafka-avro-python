@@ -7,8 +7,7 @@ topic = 'my-topic'
 
 # To consume messages
 consumer = KafkaConsumer(topic,
-                         group_id='my_group',
-                         bootstrap_servers=['172.19.0.4:9092'])
+                         bootstrap_servers=['localhost:9092'])
 
 schema_path="user.avsc"
 schema = avro.schema.parse(open(schema_path).read())

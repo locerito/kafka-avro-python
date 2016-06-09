@@ -1,10 +1,11 @@
-from kafka import KafkaProducer
+from kafka import SimpleProducer, KafkaClient
 import avro.schema
 import io, random
 from avro.io import DatumWriter
 
 # To send messages synchronously
-producer = KafkaProducer(bootstrap_servers='http://172.19.0.4:9092')
+kafka = KafkaClient('localhost:9092')
+producer = SimpleProducer(kafka)
 
 # Kafka topic
 topic = "my-topic"
