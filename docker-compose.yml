@@ -1,0 +1,47 @@
+version: "2"
+
+services:
+
+  zookeeper:
+    image: stratio/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: stratio/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    links:
+      - zookeeper
+    environment:
+      ZOOKEEPER_HOSTS: zookeeper:2181
+
+  cassandra:
+    image: stratio/cassandra-lucene-index:2.2.5.3
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+     CLUSTER_NAME: DemoCluster
+     MAX_HEAP: 256M
+     MAX_NEW: 64M
+
+  ingestion:
+    image: stratio/ingestion:latest
+    container_name: ingestion
+    ports:
+      - "34545:34545"
+    depends_on:
+      - zookeeper
+      - kafka
+      - cassandra
+    links:
+      - zookeeper
+      - kafka
+      - cassandra
+    environment:
+      ZOOKEEPER_HOSTS: zookeeper:2181
